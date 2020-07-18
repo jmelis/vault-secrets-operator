@@ -28,26 +28,33 @@ type VaultSecretSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of VaultSecret. Edit VaultSecret_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	// +kubebuilder:validation:Required
+	Path string `json:"path,omitempty"`
+	Name string `json:"name,omitempty"`
+
+	// +kubebuilder:validation:Required
+	Version int `json:"version,omitempty"`
 }
 
 // VaultSecretStatus defines the observed state of VaultSecret
 type VaultSecretStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
+	Reconciled bool   `json:"reconciled"`
+	Error      string `json:"error,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
 // VaultSecret is the Schema for the vaultsecrets API
+// +kubebuilder:subresource:status
 type VaultSecret struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	Spec   VaultSecretSpec   `json:"spec,omitempty"`
-	Status VaultSecretStatus `json:"status,omitempty"`
+	Status VaultSecretStatus `json:"status"`
 }
 
 // +kubebuilder:object:root=true
